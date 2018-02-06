@@ -1,0 +1,70 @@
+
+<h1>game show page, chess board below</h1>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" charset="utf-8"></script>
+
+
+<table id="chessboard-2" class="chessboard">
+  <!-- 1, 8 = top left -->
+  <% (1..8).to_a.reverse.each do |i| %>
+    <tr>
+      <% (1..8).each do |j| %>
+        <td class="squares" data-y-pos="<%= i %>" data-x-pos="<%= j %>">
+          <% piece = @game.pieces.find_by(x_position: j, y_position: i) %>
+          <% if piece.present? %>
+            <div class="pieces" game_id="<%= @game.id %>" piece_id="<%= piece.id %>" piece_color="<%= piece.color %>"><%= piece.type %></div>
+          <% end %>
+
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
+
+
+ <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+
+<script>
+$( function() {
+  $( ".pieces" ).draggable();
+    $( ".squares" ).droppable({
+      tolerance: 'pointer',
+      drop: function( event, ui ) {
+       $( this ) 
+        .addClass( "ui-state-highlight" )
+        .find( "p" );
+
+        var game_id = $(ui.draggable).attr('game_id');
+        var id = $(ui.draggable).attr('piece_id');
+        var new_x_pos_string = $(this).attr('data-x-pos');
+        var new_x_pos = parseInt(new_x_pos_string);
+        var new_y_pos_string = $(this).attr('data-y-pos');
+        var new_y_pos = parseInt(new_y_pos_string);
+        var color = $(this).attr('piece_color');
+        var new_coordinate = {x_position: new_x_pos, y_position: new_y_pos};
+
+        console.log( id );
+        console.log( new_x_pos );
+        console.log( new_y_pos );
+        console.log( color );
+        console.log( game_id );
+        console.log(new_coordinate);
+        // $.post('/games/' + game_id + '/pieces/' + id, new_coordinate);
+        $.ajax({
+          url: '/games/' + game_id + '/pieces/' + id,
+          type: 'PUT',
+          dataType: 'json',
+          data: { "piece": {
+            "x_position": new_x_pos,
+            "y_position": new_y_pos
+          }
+        }
+        });
+      }
+    });
+  } );
+
+</script>

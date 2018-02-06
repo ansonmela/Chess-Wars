@@ -1,0 +1,7 @@
+<h1>move piece </h1>
+
+<%= simple_form_for @piece, as: :piece, :url => game_piece_path do |f| %>
+	<%= f.input :x_position %>
+	<%= f.input :y_position %>
+	<%= f.submit "update" %>
+<% end %>

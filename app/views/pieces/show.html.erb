@@ -1,0 +1,30 @@
+<h1>move your piece</h1>
+
+<table id="chessboard-2" class="chessboard">
+  <!-- 1, 8 = top left -->
+  <% (1..8).to_a.reverse.each do |i| %>
+    <tr>
+      <% (1..8).each do |j| %>
+
+        <td data-y-pos="<%= i %>" data-x-pos="<%= j %>" style="position: relative">
+          <% if @piece.x_position == j && @piece.y_position == i %>
+            <div class="highlighted" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #f3fd71">
+              <%= @piece.name %>
+
+            </div>
+          <% else %>
+            <%= simple_form_for [@piece.game, @piece], as: :piece, url: game_piece_path(@piece.game, @piece) do |f| %>
+              <%= f.input :x_position, as: :hidden, input_html: { value: j } %>
+              <%= f.input :y_position, as: :hidden, input_html: { value: i } %>
+
+              <%= f.submit "Move Here" %>
+            <% end %>
+            <%# "(#{i}, #{j})" %>
+          <% end %>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
+
+
