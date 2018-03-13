@@ -15,9 +15,7 @@ class Pawn < Piece
     end
   
     #only allowed to move one space
-    if 
-      # (self.x_position - x_move).abs > 1 || 
-      (self.y_position - y_move).abs > 1
+    if (self.y_position - y_move).abs > 1
       return false
     else
       return true
